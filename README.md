@@ -1,5 +1,35 @@
+# 给自己的学习笔记
 
-# 用 Python 获取 B 站播放历史记录
+## 01 参考内容
+
+### 01-01 github的B站 api 收集项目
+
+* 项目地址：[哔哩哔哩-API收集整理【不断更新中....】](https://github.com/SocialSisterYi/bilibili-API-collect)
+* `https://api.bilibili.com/x/web-interface/history/cursor`
+* doc：[历史记录 | BAC Document (socialsisteryi.github.io)](https://socialsisteryi.github.io/bilibili-API-collect/docs/history_toview/history.html)
+
+
+### 01-02 原本项目内容
+
+* `http://api.bilibili.com/x/v2/history?pn=页码`
+  * 获取自己历史记录 来自uid:176936889(GET 返回json 需cookie)
+  * 来自：[BilibiliAPI 合集 含个人、视频、直播等信息 - 哔哩哔哩](https://www.bilibili.com/read/cv12357091/)
+
+
+
+## todo内容
+
+- [ ] 增量导出
+- [ ] GUI界面
+- [ ] （可能）作为bilibil-evolved的一个组件
+
+---
+
+以下为原readme
+
+---
+
+## 用 Python 获取 B 站播放历史记录
 
 最近 B 站出了一个年度报告，统计用户一年当中在 B 站上观看视频的总时长和总个数。过去一年我居然在 B 站上看了 `2600+` 个视频，总计 `251` 个小时，居然花了这么多时间，吓得我差点把 Bilibili App 卸载了...
 
@@ -7,7 +37,7 @@
 
 然而我又很好奇，到底我在 B 站上都看了些什么类型  ~~小姐姐~~ 的视频，用几行 Python 代码实现了一下。
 
-## 获取请求 Api 接口与 Cookie
+### 获取请求 Api 接口与 Cookie
 
 实现起来非常容易，获取 cookie 模拟请求即可
 
@@ -27,7 +57,7 @@
 
 ![](https://ws1.sinaimg.cn/large/c3a916a7gy1fzfkkj1adsj20ta07ita2.jpg)
 
-## Python 代码实现
+### Python 代码实现
 
 - 伪造浏览器请求
 
@@ -87,12 +117,12 @@ def get_all_bili_history(cookie_file):
 
 - 代码非常简单，完整代码在 [https://github.com/wangshub/bilibili-history](https://github.com/wangshub/bilibili-history)
 
-## 存在的问题
+### 存在的问题
 
 - 本来想拿到所有的播放记录，做一些统计和预测，但是经过实测，B 站只能获取到最近 `1000` 条或者最近 `3` 个月的播放记录
 
 - 如果想获得更多，只能做一个监测程序，不停地从接口获取数据
 
-## 安全问题
+### 安全问题
 
 尽量不要使用不安全的 wifi 网络，有可能会被别有用心之人获取网络请求的 Package，易泄露个人隐私。
