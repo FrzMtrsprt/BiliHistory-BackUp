@@ -9,6 +9,8 @@
 * doc：[历史记录 | BAC Document (socialsisteryi.github.io)](https://socialsisteryi.github.io/bilibili-API-collect/docs/history_toview/history.html)
 
 
+
+
 ### 01-02 原本项目内容
 
 * `http://api.bilibili.com/x/v2/history?pn=页码`
@@ -20,8 +22,10 @@
 ## todo内容
 
 - [ ] 增量导出
+- [ ] 统计功能
 - [ ] GUI界面
 - [ ] （可能）作为bilibil-evolved的一个组件
+- [ ] 后期接入本地大模型，结合RAG用
 
 ---
 
