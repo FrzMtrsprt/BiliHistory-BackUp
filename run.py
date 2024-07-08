@@ -13,7 +13,7 @@ delay_time = 1 # 每页获取间歇时间，0.6-5，随便设，别太快就行
 
 ##########################
 # 以下为旧数据合并部分
-OLD_HISTORY_FILE = 'history_202406291851-202407081600_1604.json'  # 旧的历史记录文件名
+OLD_HISTORY_FILE = 'xxxx.json'  # 旧的历史记录文件名
 
 # 合并功能函数1：加载数据
 def load(filename):
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     # 将时间戳转换为日期时间字符串
     first_time_str = datetime.fromtimestamp(first_time).strftime('%Y%m%d%H%M')
     last_time_str = datetime.fromtimestamp(last_time).strftime('%Y%m%d%H%M')
-    
+
     # 构建文件名，重构输出格式
     filename = 'history_{}-{}_{}.json'.format(first_time_str, last_time_str, count)
     final_history = [{"all":history},[last_time_str,last_time],[first_time_str,first_time],count]
