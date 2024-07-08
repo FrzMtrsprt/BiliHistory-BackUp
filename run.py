@@ -13,7 +13,7 @@ delay_time = 1 # 每页获取间歇时间，0.6-5，随便设，别太快就行
 
 ##########################
 # 以下为旧数据合并部分
-OLD_HISTORY_FILE = 'history_202406291855-202407072253_1512.json'  # 旧的历史记录文件名
+OLD_HISTORY_FILE = 'history_202406291851-202407081600_1604.json'  # 旧的历史记录文件名
 
 # 合并功能函数1：加载数据
 def load(filename):
@@ -78,9 +78,13 @@ def get_all_bili_history(cookie_file):
 
         # 检查结果是否有效
         if result is None or 'data' not in result or result['data'] is None:
-            print("Invalid result: \n", result)
-            print("没记录了哦(=￣ω￣=)\n\n\n")
-            break  # 如果结果无效，停止获取
+            if result.get('code') == 0:
+                print("正常结束，没记录了哦(=￣ω￣=)\n\n")
+            else:
+                print("不正常结束，检查下有啥问题(´･_･`)")
+                print(f"result的结果为{result}")
+            break
+
 
 
 
@@ -109,19 +113,17 @@ if __name__ == '__main__':
     old_history = load(OLD_HISTORY_FILE)  # 确保这里加载的是列表
     history = merge_histories(old_history, history)
     history, first_time, last_time, count = process_history(history)
-    print('以下为融合过的结果：')
 
 
     # 将时间戳转换为日期时间字符串
     first_time_str = datetime.fromtimestamp(first_time).strftime('%Y%m%d%H%M')
     last_time_str = datetime.fromtimestamp(last_time).strftime('%Y%m%d%H%M')
-    # 构建文件名
+    
+    # 构建文件名，重构输出格式
     filename = 'history_{}-{}_{}.json'.format(first_time_str, last_time_str, count)
-
-    # 重构输出格式。all、文件第1条数据的[字符戳、时间]、最后1条数据的[字符戳、时间]，计数
     final_history = [{"all":history},[last_time_str,last_time],[first_time_str,first_time],count]
 
     # 保存历史记录到文件
     save(final_history, filename)
-    print(f"数据已经保存到{filename}")
+    print(f"数据已经保存到：{filename}")
     print(f"总数据条数: {count}")
