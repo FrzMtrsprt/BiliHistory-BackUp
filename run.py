@@ -13,12 +13,15 @@ delay_time = 1 # 每页获取间歇时间，0.6-5，随便设，别太快就行
 
 ##########################
 # 以下为旧数据合并部分
-OLD_HISTORY_FILE = 'history.json'  # 旧的历史记录文件名
+OLD_HISTORY_FILE = 'history_202406291855-202407072253_1512.json'  # 旧的历史记录文件名
 
 # 合并功能函数1：加载数据
 def load(filename):
     with open(HISTORY_DIR + filename, 'r', encoding='utf-8') as fp:
-        return json.load(fp)
+        data = json.load(fp)
+        # 提取 "all" 元素
+        all_data = data[0]["all"]
+        return {"all": all_data}
 
 
 # 合并功能函数2：合并历史记录
@@ -32,15 +35,14 @@ def merge_histories(old, new):
 
 # 合并功能函数3：排序历史记录
 def process_history(history):
+    all_entries = history["all"]  # 提取 "all" 列表
     # 将历史记录按照时间戳排序，从大到小（reverse）
-    history['all'].sort(key=lambda x: x['view_at'], reverse=True)
+    all_entries.sort(key=lambda x: x['view_at'], reverse=True)
     # 获取最早和最晚的时间戳，以及总计数
-    first_time = history['all'][0]['view_at']
-    last_time = history['all'][-1]['view_at']
-    count = len(history['all'])
-    return history, first_time, last_time, count
-
-
+    first_time = all_entries[-1]['view_at']
+    last_time = all_entries[0]['view_at']
+    count = len(all_entries)
+    return all_entries, first_time, last_time, count
 
 ##########################
 
@@ -69,16 +71,19 @@ def get_all_bili_history(cookie_file):
         time.sleep(delay_time)  # 每次请求之间暂停5秒
         # 构建URL
         url = 'https://api.bilibili.com/x/v2/history?pn={pn}&ps={ps}&jsonp=jsonp'.format(pn=page_num, ps=PAGE_PER_NUM)
-        # 发送请求
+
+        # print(f"Requesting URL: {url}")  # 调试用：打印请求的url
         result = bilibili.req_get(headers, url)
+        # print(f"Response: {result}")  # 调试用：打印返回的结果(防止报错)
 
         # 检查结果是否有效
         if result is None or 'data' not in result or result['data'] is None:
-            # print("Invalid result: \n", result)
-
+            print("Invalid result: \n", result)
             print("没记录了哦(=￣ω￣=)\n\n\n")
-
             break  # 如果结果无效，停止获取
+
+
+
 
         # 打印结果信息，code的值为0应该就是表示请求成功，直接访问网页就是code=0
         print('第{}页，有{}条数据，数据获取状态：{}'.format(page_num+1, len(result['data']),result['code']))
@@ -101,18 +106,22 @@ if __name__ == '__main__':
 
 
     # 如果需要合并历史记录，取消下面三行的注释
-    old_history = load(OLD_HISTORY_FILE)
+    old_history = load(OLD_HISTORY_FILE)  # 确保这里加载的是列表
     history = merge_histories(old_history, history)
-    history = process_history(history)
-    count = history[-1]
+    history, first_time, last_time, count = process_history(history)
     print('以下为融合过的结果：')
+
 
     # 将时间戳转换为日期时间字符串
     first_time_str = datetime.fromtimestamp(first_time).strftime('%Y%m%d%H%M')
     last_time_str = datetime.fromtimestamp(last_time).strftime('%Y%m%d%H%M')
     # 构建文件名
     filename = 'history_{}-{}_{}.json'.format(first_time_str, last_time_str, count)
+
+    # 重构输出格式。all、文件第1条数据的[字符戳、时间]、最后1条数据的[字符戳、时间]，计数
+    final_history = [{"all":history},[last_time_str,last_time],[first_time_str,first_time],count]
+
     # 保存历史记录到文件
-    save(history, filename)
+    save(final_history, filename)
     print(f"数据已经保存到{filename}")
     print(f"总数据条数: {count}")
