@@ -13,7 +13,7 @@ delay_time = 1 # 每页获取间歇时间，0.6-5，随便设，别太快就行
 
 ##########################
 # 以下为旧数据合并部分
-OLD_HISTORY_FILE = 'xxxx.json'  # 旧的历史记录文件名
+OLD_HISTORY_FILE = 'history_202406291851-202407091026_1812.json'  # 旧的历史记录文件名
 
 # 合并功能函数1：加载数据
 def load(filename):
@@ -64,7 +64,7 @@ def get_all_bili_history(cookie_file):
     last_time = None
     count = 0  # 初始化计数器
 
-    print('数据获取状态代码为0,则为正常\n')
+    print('要开始了哟！[]~(￣▽￣)~*\n')
 
     # 对每一页进行循环
     for page_num in range(MAX_PAGE):
@@ -85,12 +85,13 @@ def get_all_bili_history(cookie_file):
                 print(f"result的结果为{result}")
             break
 
+        # code的值为0应该就是表示请求成功，直接访问网页就是code=0
+        if result['code'] == 0:
+            status = '正常'
+        else:
+            status = '错误'
+        print('第{}页，有{}条数据，数据获取状态：{}'.format(page_num+1, len(result['data']),status))
 
-
-
-
-        # 打印结果信息，code的值为0应该就是表示请求成功，直接访问网页就是code=0
-        print('第{}页，有{}条数据，数据获取状态：{}'.format(page_num+1, len(result['data']),result['code']))
         # 将结果添加到历史记录中
         history['all'].extend(result['data'])
         # 更新计数器
