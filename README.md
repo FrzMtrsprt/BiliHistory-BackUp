@@ -16,6 +16,18 @@
 
 `https://api.bilibili.com/x/v2/history?pn=1`
 
+来自：[哔哩哔哩-API收集整理](https://socialsisteryi.github.io/bilibili-API-collect/)
+
+获取视频观看历史记录_web端旧版
+
+
+
+| 字段    | 类型 | 内容     | 备注   |
+| ------- | ---- | -------- | ------ |
+| view_at | num  | 观看时间 | 时间戳 |
+
+
+
 <details>
 	<summary>参数种类（待完成对照表，仅为展示）</summary>
 	<pre><code>
