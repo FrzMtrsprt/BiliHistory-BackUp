@@ -14,13 +14,9 @@
 
 ### 00-01 直接获取
 
-`https://api.bilibili.com/x/v2/history?pn=1`
+爬取的url链接为：`https://api.bilibili.com/x/v2/history?pn=1`，来自：[哔哩哔哩-API收集整理](https://socialsisteryi.github.io/bilibili-API-collect/)
 
-来自：[哔哩哔哩-API收集整理](https://socialsisteryi.github.io/bilibili-API-collect/)
-
-获取视频观看历史记录_web端旧版
-
-
+其描述为：视频观看历史记录_web端旧版。因为观看时间具有独特性，所以将其视为主key，其结构如下
 
 | 字段    | 类型 | 内容     | 备注   |
 | ------- | ---- | -------- | ------ |
@@ -29,7 +25,7 @@
 
 
 <details>
-	<summary>参数种类（待完成对照表，仅为展示）</summary>
+	<summary>抓取的参数种类（待完成对照表，仅为展示）</summary>
 	<pre><code>
 * aid
 * videos
@@ -115,7 +111,7 @@
 </details>
 
 <details>
-    <summary>参数结构</summary>
+    <summary>抓取的参数结构</summary>
     <pre><code>
 {
     "code": 0,
@@ -147,7 +143,11 @@
 }</code></pre>
 </details>
 
-一页有300条数据，总共能获取1500条数据/三个月的数据
+
+
+在url链接中，一页有300条数据，总共能获取1500条数据/三个月的数据
+
+
 
 ### 00-02 处理中
 
@@ -193,21 +193,19 @@ xxx.json：{list}：
 
 实现起来非常容易，获取 cookie 模拟请求即可
 
-1. 使用 chrome 浏览器
+1. 使用 chrome/edge/firefox浏览器
 
 2. 登陆 [B 站](https://www.bilibili.com)，进入历史记录 [https://www.bilibili.com/account/history](https://www.bilibili.com/account/history) 
 
-3. 在网页任意位置，鼠标右键 `检查`
+3. 进入`检查`：在网页任意位置，鼠标右键 `检查`；或者直接按`F12`
 
-![](https://ws1.sinaimg.cn/large/c3a916a7gy1fzfkf5qyuqj20c009g765.jpg)
+![image-20240714000516167](./assets/image-20240714000516167.png)
 
-4. 按照下图所示，进入 `Network` 页面，筛选框输入 `history`，对结果进行筛选，页面滚轮往下即可看到浏览过程中的历史记录请求的 `Header`
+4. 按照下图所示，进入 `Network` 页面，筛选框输入 `history`，对结果进行筛选，页面滚轮往下即可看到浏览过程中的历史记录请求的 `Header`。如果没有显示的话，记得刷新。
 
-![](https://ws1.sinaimg.cn/large/c3a916a7gy1fzfkc5s8scj21ga0nok4i.jpg)
+![image-20240714001417023](./assets/image-20240714001417023.png)
 
 5. 将 Header 下， cookie 一行的字符串复制出来到一个 `cookies.txt` 文本里
-
-![](https://ws1.sinaimg.cn/large/c3a916a7gy1fzfkkj1adsj20ta07ita2.jpg)
 
 
 
@@ -257,7 +255,7 @@ def req_get(headers, url):
 
 ### 01-03 获取历史数据信息
 
-直接获取，一般是前五页由内容，第六页开始没内容。加了个判断语句，报错再看。
+直接获取，一般是前五页有内容，第六页开始没内容。加了个判断语句，报错再看。
 
 
 
